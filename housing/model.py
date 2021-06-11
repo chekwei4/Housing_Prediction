@@ -17,6 +17,9 @@ from sklearn.model_selection import RandomizedSearchCV
 from sklearn.model_selection import GridSearchCV
 from xgboost.sklearn import XGBRegressor
 import joblib
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import confusion_matrix, accuracy_score
+from xgboost.sklearn import XGBClassifier
 
 # TODO
 # 1. refactor standardize_data method -> done
@@ -32,18 +35,19 @@ def read_config_param():
     return data
 
 
-def train(df_cleaned, model, cv):
+def train(df_cleaned, app, model, cv):
     df_cleaned_scaled = process_data.standardize_data(df_cleaned)
     X = df_cleaned_scaled.iloc[:, :-1]
     y = df_cleaned_scaled.iloc[:, -1]
+
     if model == "rf":
         # return model_rf(X, y, cv)
-        return model_rf_with_rscv(X, y, cv)
+        return model_rf_with_rscv(X, y, app, cv)
     # elif model == "svr":
         # return model_svr(X, y, cv)
     elif model == "xgb":
         # return model_xgb(X, y, cv)
-        return model_xgb_with_rscv(X, y, cv)
+        return model_xgb_with_rscv(X, y, app, cv)
 
 
 def predict(df_cleaned, joblib_file):
@@ -61,36 +65,67 @@ def predict(df_cleaned, joblib_file):
     return
 
 
-def model_rf_with_rscv(X, y, cv):
-    rf_regressor = RandomForestRegressor()
-    data = read_config_param()
-    random_grid = data['model']['rf']
-    # rf_random = RandomizedSearchCV(estimator=rf_regressor, param_distributions=random_grid,
-    #                                n_iter=10, cv=cv, verbose=10, random_state=42, n_jobs=-1)
-    rf_model = RandomizedSearchCV(estimator=rf_regressor, param_distributions=random_grid,
-                                  n_iter=10, cv=cv, verbose=0, random_state=42, n_jobs=-1,
-                                  scoring='neg_mean_absolute_error')
-    logging.info("Running RandomizedSearchCV...")
-    rf_model.fit(X, y)
-    logging.info("RF Reg: Completed.")
-    return rf_model.best_score_
+def model_rf_with_rscv(X, y, app, cv):
+    if app == "reg":
+        rf_regressor = RandomForestRegressor()
+        data = read_config_param()
+        random_grid = data['model']['rf_r']
+        # rf_random = RandomizedSearchCV(estimator=rf_regressor, param_distributions=random_grid,
+        #                                n_iter=10, cv=cv, verbose=10, random_state=42, n_jobs=-1)
+        rf_model = RandomizedSearchCV(estimator=rf_regressor, param_distributions=random_grid,
+                                      n_iter=10, cv=cv, verbose=0, random_state=42, n_jobs=-1,
+                                      scoring='neg_mean_absolute_error')
+        logging.info("Running RandomizedSearchCV...")
+        rf_model.fit(X, y)
+        logging.info("RF Reg: Completed.")
+        return rf_model.best_score_
+
+    elif app == "cla":
+        rf_classifier = RandomForestClassifier()
+        data = read_config_param()
+        random_grid = data['model']['rf_c']
+
+        rf_model = RandomizedSearchCV(estimator=rf_classifier, param_distributions=random_grid,
+                                      n_iter=10, cv=cv, verbose=0, random_state=42, n_jobs=-1,
+                                      scoring='accuracy')
+        logging.info("Running RandomizedSearchCV...")
+        rf_model.fit(X, y)
+        logging.info("RF Cla: Completed.")
+        # accuracy = cross_val_score(rf_classifier, X, y, cv=cv)
+        return (rf_model.best_score_.mean(), rf_model.best_score_.std())
 
 
-def model_xgb_with_rscv(X, y, cv):
+def model_xgb_with_rscv(X, y, app, cv):
     # data_dmatrix = xgb.DMatrix(data=X, label=y)
-    xgb_reg = XGBRegressor()
-    data = read_config_param()
-    random_grid = data['model']['xgb']
-    xgb_model = RandomizedSearchCV(xgb_reg, param_distributions=random_grid, n_iter=10,
-                                   scoring='neg_mean_absolute_error', n_jobs=-1, cv=cv, verbose=0)
-    logging.info("Running RandomizedSearchCV ...")
-    xgb_model.fit(X, y)
-    logging.info("XGB Reg: Completed.")
-    joblib_file = "./model/joblib_xgb_model.pkl"
-    joblib.dump(xgb_model.best_estimator_, joblib_file)
+    if app == "reg":
+        xgb_reg = XGBRegressor()
+        data = read_config_param()
+        random_grid = data['model']['xgb_r']
+        xgb_model = RandomizedSearchCV(xgb_reg, param_distributions=random_grid, n_iter=10,
+                                       scoring='neg_mean_absolute_error', n_jobs=-1, cv=cv, verbose=0)
+        logging.info("Running RandomizedSearchCV ...")
+        xgb_model.fit(X, y)
+        logging.info("XGB Reg: Completed.")
+        joblib_file = "./model/joblib_xgb_model.pkl"
+        joblib.dump(xgb_model.best_estimator_, joblib_file)
+        return xgb_model.best_score_
 
-    return xgb_model.best_score_
+    elif app == "cla":
+        xgb_classifier = XGBClassifier()
 
+        data = read_config_param()
+        random_grid = data['model']['xgb_c']
+
+        xgb_model = RandomizedSearchCV(xgb_classifier, param_distributions=random_grid, n_iter=10,
+                                       scoring='accuracy', n_jobs=-1, cv=cv, verbose=0)
+
+        logging.info("Running RandomizedSearchCV...")
+        # accuracy = cross_val_score(xgb_classifier, X, y, cv=cv)
+        xgb_model.fit(X, y)
+        logging.info("XGB Cla: Completed.")
+        joblib_file = "./model/joblib_xgb_cla_model.pkl"
+        joblib.dump(xgb_model, joblib_file)
+        return (xgb_model.best_score_.mean(), xgb_model.best_score_.std())
 
 # def model_rf(X, y, cv):
 #     rf_regressor = RandomForestRegressor(n_estimators=100)
@@ -100,7 +135,6 @@ def model_xgb_with_rscv(X, y, cv):
 #         estimator=rf_regressor, X=X, y=y, cv=cv, scoring='neg_mean_absolute_error')
 #     logging.info("RF CV: Completed.")
 #     return mean(result_mae)
-
 
 # def model_xgb(X, y, cv):
 #     data_dmatrix = xgb.DMatrix(data=X, label=y)
