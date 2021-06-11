@@ -20,7 +20,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 import logging
-from . import utils
+
+# logging.basicConfig(level=logging.DEBUG, filename='app.log',
+#                     filemode='w', format='%(asctime)s - %(message)s')
+logging.basicConfig(level=logging.DEBUG)
 
 
 def read_data(csv_file: str) -> pd.DataFrame:
@@ -121,7 +124,7 @@ def get_dummy_features(housing_df):
     cat_dummies = [col for col in df_dummy if "__" in col and col.split(
         "__")[0] in nominal_categorical_features]
 
-    cat_dummies_file = open("./model/cat_dummies.txt", "w")
+    cat_dummies_file = open("./model/processed_columns.txt", "w")
     for element in cat_dummies:
         cat_dummies_file.write(element + "\n")
     cat_dummies_file.close()
@@ -143,7 +146,7 @@ def get_dummy_features(housing_df):
 def get_dummy_features_for_test(housing_df):
     cat_dummies = []
     # open file and read the content in a list
-    with open('./model/cat_dummies.txt', 'r') as filehandle:
+    with open('./model/processed_columns.txt', 'r') as filehandle:
         for line in filehandle:
             # remove linebreak which is the last character of the string
             feat = line[:-1]

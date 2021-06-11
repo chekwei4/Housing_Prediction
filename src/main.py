@@ -1,11 +1,12 @@
 import argparse
 import logging
-
 from numpy.core.arrayprint import str_format
 from . import process_data
 from . import model
-from . import utils
+# from . import utils
 import joblib
+
+logging.basicConfig(level=logging.DEBUG)
 
 # MODE - TRAIN
 # df_train = split it into train and valid set
@@ -57,10 +58,9 @@ def main():
             logging.info("mean_absolute_error = %s", mae)
         elif args.app == "cla":
             df_cleaned_bin = process_data.get_bin(df_cleaned)
-            mean_accuracy, std_accuracy = model.train(df_cleaned_bin, app=args.app,
-                                                      model=args.model, cv=args.cv)
+            mean_accuracy = model.train(df_cleaned_bin, app=args.app,
+                                        model=args.model, cv=args.cv)
             logging.info("mean accuracy = %s", mean_accuracy)
-            logging.info("std accuracy = %s", std_accuracy)
 
     elif args.mode == "predict" and args.csv != None:
 

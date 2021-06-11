@@ -26,7 +26,7 @@ from xgboost.sklearn import XGBClassifier
 # 2. gridsearch for kernels, read from config file. use JSON -> done
 # 3. return statement for train() method -> done
 # 4. work on model_rf, model_sv for cv (no need for simplesplit) -> done
-# 5. create joblib for best model - default for predict.
+# 5. create joblib for best model - default for predict. -> done
 
 
 def read_config_param():
@@ -92,7 +92,7 @@ def model_rf_with_rscv(X, y, app, cv):
         rf_model.fit(X, y)
         logging.info("RF Cla: Completed.")
         # accuracy = cross_val_score(rf_classifier, X, y, cv=cv)
-        return (rf_model.best_score_.mean(), rf_model.best_score_.std())
+        return (rf_model.best_score_.mean())
 
 
 def model_xgb_with_rscv(X, y, app, cv):
@@ -111,7 +111,7 @@ def model_xgb_with_rscv(X, y, app, cv):
         return xgb_model.best_score_
 
     elif app == "cla":
-        xgb_classifier = XGBClassifier()
+        xgb_classifier = XGBClassifier(verbosity=0)
 
         data = read_config_param()
         random_grid = data['model']['xgb_c']
@@ -125,7 +125,7 @@ def model_xgb_with_rscv(X, y, app, cv):
         logging.info("XGB Cla: Completed.")
         joblib_file = "./model/joblib_xgb_cla_model.pkl"
         joblib.dump(xgb_model, joblib_file)
-        return (xgb_model.best_score_.mean(), xgb_model.best_score_.std())
+        return (xgb_model.best_score_.mean())
 
 # def model_rf(X, y, cv):
 #     rf_regressor = RandomForestRegressor(n_estimators=100)
