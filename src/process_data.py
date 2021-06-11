@@ -244,7 +244,7 @@ def clean_data(housing_df: pd.DataFrame, data) -> pd.DataFrame:
 
 
 def get_bin(housing_df_c: pd.DataFrame) -> pd.DataFrame:
-    bin_labels = [0, 1, 3, 4]
+    bin_labels = [0, 1, 2, 3]
     price_25_per = np.percentile(housing_df_c['saleprice'], 25)
     price_50_per = np.percentile(housing_df_c['saleprice'], 50)
     price_75_per = np.percentile(housing_df_c['saleprice'], 75)
