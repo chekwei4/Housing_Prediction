@@ -64,6 +64,9 @@ Below are some of the highlights from EDA.
 **Full EDA ipynb**: https://github.com/chekwei4/Housing_Prediction/blob/master/Housing_Prediction_EDA.ipynb
 
 # Data Processing
+
+Few data processing steps to highlight below: 
+
 ## Drop features that are 
 1. dominated by single value
 
@@ -121,7 +124,7 @@ For classification approach, the SalePrice are binned into 4, based on the quart
 
 
 # Modelling
-I first standardized the 
+I standardized the continuous features, and I split the train data into training and validation set, into 30%-70%. Some baseline models were created before finalising on few better ones. 
 
 For Regression, models were built with Random Forest, SVM, XGB regressors. 
 
