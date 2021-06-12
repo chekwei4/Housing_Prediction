@@ -192,5 +192,9 @@ Kaggle competition submission friendly.
 
 2. GridSearchCV to obtain better hyperparameters for models
 
+3. Better handle and get info from temoporal features (Eg. GarageYrBuilt, YrSold)
+
+4. Explore other feature scaling methods, and more thoughts into data cleaning and better feature selection via Lasso
+
 # Useful Links
 - Google Python style guide https://google.github.io/styleguide/pyguide.html
