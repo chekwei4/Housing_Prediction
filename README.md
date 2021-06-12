@@ -26,24 +26,25 @@ With 79 explanatory variables describing (almost) every aspect of residential ho
 # File structure
 
 ```
-|-- src
-    |-- main.py
-    |-- model.py
-    |-- process_data.py
-|-- data
-    |-- train_val.csv
-    |-- test.csv 
-|-- model
-    |-- joblib_xgb_cla_model.pkl
-    |-- joblib_xgb_model.pkl
-    |-- processed_columns.txt
-|-- prediction
-    |-- prediction.csv
-|-- README.md
-|-- run.sh
-|-- requirements.txt
-|-- Housing_Prediction_EDA.ipynb
-|-- config.json
+|-- Housing
+    |-- src
+        |-- main.py
+        |-- model.py
+        |-- process_data.py
+    |-- data
+        |-- train_val.csv
+        |-- test.csv 
+    |-- model
+        |-- joblib_xgb_cla_model.pkl
+        |-- joblib_xgb_model.pkl
+        |-- processed_columns.txt
+    |-- prediction
+        |-- prediction.csv
+    |-- README.md
+    |-- run.sh
+    |-- requirements.txt
+    |-- Housing_Prediction_EDA.ipynb
+    |-- config.json
 ```
 
 # Exploratory Data Science
