@@ -139,9 +139,9 @@ MAE measures the average magnitude of the errors in a set of predictions, withou
 I chose MAE because it was easier to interpret, and as we are doing price predictions, I decided that direction of difference between prediction and actual price need not matter. (Eg. 
 A $1000 prediction that is more or less than actual is disregarded)
 
-For Clasisification, Random Forest, XGB, Naive Bayes, KNN and Decision Trees were built during experiement phase. Ultimately, only RF and XGB models were retained as they yield better results at baseline. 
+For Classification, Random Forest, XGB, Naive Bayes, KNN and Decision Trees were built during experiement phase. Ultimately, only RF and XGB models were retained as they yield better results at baseline. 
 
-For Clasisification approach, the key metric to evaluate the model results was accuracy score.
+For Classification approach, the key metric to evaluate the model results was accuracy score.
 
 
 # Getting Started - Instruction
