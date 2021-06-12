@@ -1,5 +1,5 @@
 ## Introduction 
-With 79 explanatory variables describing (almost) evry aspect of residential homes in Ames, Iowa, this project aims to predict the final price of each home.
+With 79 explanatory variables describing (almost) every aspect of residential homes in Ames, Iowa, this project aims to predict the final price of each home.
 
 Project aims to predict house prices in two ways
 1. as a regression problem
