@@ -8,7 +8,7 @@ With 79 explanatory variables describing (almost) every aspect of residential ho
 
     - as a classification problem (by binning the prices into 4 categorical quartiles)
 
-    - user can also choose the number of cross validation folds to train the model
+    - user can also specify the number of cross validation folds to train the model
 
 2. Project also aims to run Random Forest and XGB models using RandomizedSearchCV to reach the best model. Hyperparameters can be easily configured by users via config.json.
 
@@ -51,15 +51,19 @@ Below are some of the highlights from EDA.
 
 1. Missing value analysis
 
-<< insert EDA pic >>
+<img src="./image/missing_value.png" width="550" height="500" />
+
+<!-- ![Getting Started](./image/missing_value.png) -->
 
 2. Features which are correlated to dependent feature aka SalePrice
 
-<< insert EDA pic >>
+![Getting Started](./image/corr_price.png)
 
 3. Features which are dominated by large number of single value
 
-<< insert EDA pic >>
+    ![Getting Started](./image/heating.png)
+    ![Getting Started](./image/roofmatl.png)
+    ![Getting Started](./image/condition2.png)
 
 **Full EDA ipynb**: https://github.com/chekwei4/Housing_Prediction/blob/master/Housing_Prediction_EDA.ipynb
 
@@ -142,12 +146,12 @@ For Regression approach, the key metric to evaluate the model results was accura
 
 # Getting Started - Instruction
 ## Model training
-### Regression with Random Forest or XGB
+### Regression with Random Forest or XGB (with cross validation = 10)
 ```
-python -m src.main -mode train -csv data/train_val.csv -app reg -model rf 
-python -m src.main -mode train -csv data/train_val.csv -app reg -model xgb
+python -m src.main -mode train -csv data/train_val.csv -app reg -model rf -cv 10
+python -m src.main -mode train -csv data/train_val.csv -app reg -model xgb -cv 10
 ```
-### Classification with Random Forest or XGB
+### Classification with Random Forest or XGB (with cross validation default = 5)
 ```
 python -m src.main -mode train -csv data/train_val.csv -app cla -model rf 
 python -m src.main -mode train -csv data/train_val.csv -app cla -model xgb
