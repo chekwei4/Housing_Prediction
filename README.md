@@ -1,11 +1,29 @@
-## Introduction 
+# Project Overview 
 With 79 explanatory variables describing (almost) every aspect of residential homes in Ames, Iowa, this project aims to predict the final price of each home.
 
-Project aims to predict house prices in two ways
-1. as a regression problem
-2. as a classification problem (by binning the prices into 4 categorical quartiles)
+# Objective
+1. Project aims to allow business to train and predict house prices in two ways as they wish
 
-## File structure
+    - as a regression problem
+
+    - as a classification problem (by binning the prices into 4 categorical quartiles)
+
+    - user can also choose the number of cross validation folds to train the model
+
+2. Project also aims to run Random Forest and XGB models using RandomizedSearchCV to reach the best model. Hyperparameters can be easily configured by users via config.json.
+
+3. Project aims to save most optimized model, after training, so that user can use it to get predicted results on unseen data. 
+
+# Code and Resources
+- **Python version**: 3.8.5
+
+- **Packages**: pandas, numpy, matplotlib, seaborn, sklearn, json, joblib
+
+- **Kaggle source**: https://www.kaggle.com/c/home-data-for-ml-course
+
+- **Github repo**: https://github.com/chekwei4/Housing_Prediction
+
+# File structure
 
 ```
 |-- src
@@ -24,14 +42,29 @@ Project aims to predict house prices in two ways
 |-- README.md
 |-- run.sh
 |-- requirements.txt
-|-- EDA.ipynb
+|-- Housing_Prediction_EDA.ipynb
+|-- config.json
 ```
 
-## Exploratory Data Science
-Some text
+# Exploratory Data Science
+Below are some of the highlights from EDA. 
 
-## Data Processing
-### Drop features that are 
+1. Missing value analysis
+
+<< insert EDA pic >>
+
+2. Features which are correlated to dependent feature aka SalePrice
+
+<< insert EDA pic >>
+
+3. Features which are dominated by large number of single value
+
+<< insert EDA pic >>
+
+**Full EDA ipynb**: https://github.com/chekwei4/Housing_Prediction/blob/master/Housing_Prediction_EDA.ipynb
+
+# Data Processing
+## Drop features that are 
 1. dominated by single value
 
 ```
@@ -47,7 +80,7 @@ GarageYrBlt, 1stFlrSF, TotRmsAbvGrd, GarageArea
 PoolQC, MiscFeature, Alley, Fence, FireplaceQu
 ```
 
-### Create new features
+## Create new features
 1. This creates a new feature which sum the lot space.
 ```
 df['LotTotalArea'] = df['LotFrontage'] + df['LotArea']
@@ -61,12 +94,12 @@ df['BsmtTotalArea'] = df['TotalBsmtSF'] + df['BsmtUnfSF'] + df['BsmtFinSF1']
 df['TotalBathAbvGr'] = df['FullBath'] + df['HalfBath']
 ```
 
-### Impute missing values
+## Impute missing values
 1. For numerical features, missing values are imputed with mode value.
 
 2. For categorical features, missing values are imputed with "NA".
 
-### Encode categorical features
+## Encode categorical features
 1. Ordinal features are encoded to maintain the ranking integrity.
 
 ```
@@ -75,7 +108,7 @@ ExterQual, ExterCond, BsmtQual, BsmtCond, HeatingQC, KitchenQual, BsmtFinType1, 
 
 2. Other nominal features are encoded via one-hot encoding.  
 
-### Binning the features
+## Binning the features
 For classification approach, the SalePrice are binned into 4, based on the quartiles. 
 
 0: min - 25%
@@ -87,11 +120,22 @@ For classification approach, the SalePrice are binned into 4, based on the quart
 3: 75% - max
 
 
-## Modelling
-Some text
+# Modelling
+I first standardized the 
 
-## Result
-Some text
+For Regression, models were built with Random Forest, SVM, XGB regressors. 
+
+For Regression approach, the key metric to evaluate the model results was Mean Absolute Error.
+
+MAE measures the average magnitude of the errors in a set of predictions, without considering their direction.
+
+I chose MAE because it was easier to interpret, and as we are doing price predictions, I decided that direction of difference between prediction and actual price need not matter. (Eg. 
+A $1000 prediction that is more or less than actual is disregarded)
+
+For Clasisification, Random Forest, XGB, Naive Bayes, KNN and Decision Trees were built during experiement phase. Ultimately, only RF and XGB models were retained as they yield better results at baseline. 
+
+For Regression approach, the key metric to evaluate the model results was accuracy score.
+
 
 # Getting Started - Instruction
 ## Model training
@@ -106,7 +150,7 @@ python -m src.main -mode train -csv data/train_val.csv -app cla -model rf
 python -m src.main -mode train -csv data/train_val.csv -app cla -model xgb
 ```
 
-## Inferencing / Predicting
+## Inferencing / Predicting unseen data set
 ### Prediction outcome: Regression
 ```
 python -m src.main -mode predict -csv data/test.csv -app reg
@@ -117,15 +161,33 @@ python -m src.main -mode predict -csv data/test.csv -app cla
 ```
 
 # Output
-CSV file generated after running predict mode. 
+CSV file generated after running predict mode via Regression approach, as this is fundamentally a regression problem. 
 
 Kaggle competition submission friendly. 
 ```
 |-- prediction
     |-- prediction.csv
 ```
+# Results
+## Training results
 
-## References
-Useful Links
+**Random Forest Regression**: MAE = 17875
+
+**XGB Regression**: MAE = 17653
+
+**Random Forest Classification**: Accuracy = 0.783
+
+**XGB Classification**: Accuracy = 0.759
+
+## Test results
+
+**Kaggle Competition**: Score = 16439.73467 (26th percentile)
+
+
+# Future Enhancements (Good to have)
+1. To build a client facing API using flask
+
+2. GridSearchCV to obtain better hyperparameters for models
+
+# Useful Links
 - Google Python style guide https://google.github.io/styleguide/pyguide.html
-- Kaggle source https://www.kaggle.com/c/home-data-for-ml-course
