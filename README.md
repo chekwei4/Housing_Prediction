@@ -141,7 +141,7 @@ A $1000 prediction that is more or less than actual is disregarded)
 
 For Clasisification, Random Forest, XGB, Naive Bayes, KNN and Decision Trees were built during experiement phase. Ultimately, only RF and XGB models were retained as they yield better results at baseline. 
 
-For Regression approach, the key metric to evaluate the model results was accuracy score.
+For Clasisification approach, the key metric to evaluate the model results was accuracy score.
 
 
 # Getting Started - Instruction
