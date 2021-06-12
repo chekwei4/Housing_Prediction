@@ -145,6 +145,13 @@ For Regression approach, the key metric to evaluate the model results was accura
 
 
 # Getting Started - Instruction
+## Run
+Execute run.sh
+
+Script will install packages required for the environment in requirements.txt
+
+Script will run Random Forest Regression model and return MAE for training data. 
+
 ## Model training
 ### Regression with Random Forest or XGB (with cross validation = 10)
 ```
